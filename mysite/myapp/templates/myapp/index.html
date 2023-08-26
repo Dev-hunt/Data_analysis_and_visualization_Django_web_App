@@ -7,42 +7,147 @@
     <title>Homepage</title>
     <link rel="stylesheet" href="{% static 'myapp/styles.css'%}">
 </head>
-<body>
-    <form class="bg-white rounded px-8 pt-6 pb-8 mb-4"  method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input class="inline-block font-bold  text-base text-blue-500" type='file' name="file" id="file"></input>
-        <input class="bg-blue-500 text-white font-bold py-2 px-4 rounded" type='submit' name="submit" id=""></input>
-    </form>
+<body class="bg-gray-100">
 
-    <table>
-        <thead>
-            <tr>
+    <!-- code for nav bar or top bar -->
+    <nav class="bg-indigo-900 py-2 md:py-4  shadow-lg">
+        <div class="container px-4 md:flex md:item-center mx-auto">
+           <a href="#" class="font-bold text-xl text-white" >PROPERTY PORTFOLIO</a> 
+        </div>
+    </nav>
+     
+    <!-- container for below nav bar box -->
+    <div class="bg-indigo-200 m-7 p-6">
+        <div class="text-3xl text-gray-800 font-medium">Good Afternoon broooo!!!!!!!!!!!!!!! </div>
+        <div class="mt-4">Upload and visualize Data quickly with our reporting tool</div>
+    </div>
+
+
+    
+    <!-- code for form and its css -->
+    
+    <div class="flex">
+        <div class="w-1/2">
+            <div class="m-10 font-bold font-medium text-indigo-600">Upload CSV File</div>
+            <div class="container mx-auto w-full max-w-xs">
+                <form class="bg-white rounded px-8 pt-6 pb-8 mb-4"  method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input class="inline-block font-bold  text-base text-blue-500" type='file' name="file" id="file"></input>
+                    <input class="bg-blue-500 text-white font-bold py-2 px-4 rounded" type='submit' name="submit" id=""></input>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+
+
+    <!-- code for table and its css -->
+    <div class="m-10 font-bold text-indigo-600">Property Statics</div>
+    <div class="  mx-auto flex justify-center">
+        <div class="flex flex-col">
+            <div class="w-full">
+                <div class="bg-gray-200 border-b border-gray-400 shadow ">
+                    <table id="table" >
+                        <thead>
+                            <tr>
+                                
+                                <th class="px-6 py-2 text-base text-grey-500 font-bold">Property_Name</th>
+                                <th class="px-6 py-2 text-base text-grey-500">Price</th>
+                                <th class="px-6 py-2 text-base text-red-500">Rent</th>
+                                <th class="px-6 py-2 text-base text-red-500">tax</th>
+                                <th class="px-6 py-2 text-base text-red-500">Emi</th>
+                                <th class="px-6 py-2 text-base text-red-500">Monthly Expence</th>
+                                <th class="px-6 py-2 text-base text-red-500">Total Expence</th>
+                                <th class="px-6 py-2 text-base text-green-500">Total Income</th>
                 
-                <th class="px-6 py-2 text-base text-grey-500 font-bold">Property_Name</th>
-                <th class="px-6 py-2 text-base text-grey-500">Price</th>
-                <th class="px-6 py-2 text-base text-red-500">Rent</th>
-                <th class="px-6 py-2 text-base text-red-500">tax</th>
-                <th class="px-6 py-2 text-base text-red-500">Emi</th>
-                <th class="px-6 py-2 text-base text-red-500">Monthly Expence</th>
-                <th class="px-6 py-2 text-base text-red-500">Total Expence</th>
-                <th class="px-6 py-2 text-base text-green-500">Total_Income</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for object in data_objectss%}
+                            <tr>
+                                <td class="px-6 py-4 text-base text-grey-500 font-bold">{{object.name}}</td>
+                                <td class="px-6 py-4 text-base text-green-500">{{object.price}}</td>
+                                <td class="px-6 py-4 text-base text-red-500">{{object.rent}}</td>
+                                <td class="px-6 py-4 text-base text-red-500">{{object.tax}}</td>
+                                <td class="px-6 py-4 text-base text-red-500">{{object.Emi}}</td>
+                                <td class="px-6 py-4 text-base text-red-500">{{object.exp}}</td>
+                                <td class="px-6 py-4 text-base text-red-500">{{object.net_exp}}</td>
+                                <td class="px-6 py-4 text-base text-green-500">{{object.net_income}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td class="px-6 py-4 text-base text-grey-500 font-bold">TOTAL</td>
+                                <td id="totalprices" class="px-6 py-4 text-base text-green-500">0</td>
+                                <td id="totalrent" class="px-6 py-4 text-base text-red-500">0</td>
+                                <td id="totaltax" class="px-6 py-4 text-base text-red-500">0</td>
+                                <td id="totalemi" class="px-6 py-4 text-base text-red-500">0</td>
+                                <td id="total_montlyexp" class="px-6 py-4 text-base text-red-500">0</td>
+                                <td id="totalexp" class="px-6 py-4 text-base text-red-500">0</td>
+                                <td id="totalincome" class="px-6 py-4 text-base text-green-500">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-            </tr>
-        </thead>
-        <tbody>
-            {%for object in data_objectss%}
-            <tr>
-                <td class="px-6 py-4 text-base text-grey-500 font-bold">{{object.name}}</td>
-                <td class="px-6 py-4 text-base text-green-500">{{object.price}}</td>
-                <td class="px-6 py-4 text-base text-red-500">{{object.rent}}</td>
-                <td class="px-6 py-4 text-base text-red-500">{{object.tax}}</td>
-                <td class="px-6 py-4 text-base text-red-500">{{object.Emi}}</td>
-                <td class="px-6 py-4 text-base text-red-500">{{object.exp}}</td>
-                <td class="px-6 py-4 text-base text-red-500">{{object.net_exp}}</td>
-                <td class="px-6 py-4 text-base text-green-500">{{object.net_income}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </br>
+
+
+    <!-- script for calculate bottom total -->
+    <script>
+        table=document.getElementById("table")
+
+        //declare variable to hold value
+        let net_prices=0, net_rent=0, net_emi=0,
+        net_tax=0,net_montlyexp=0, net_totalexp=0, net_totalincome=0;
+
+        //declare variable to hold totals
+        let total_prices=0, total_rent=0, 
+        total_emi=0, total_tax=0,total_montlyexp=0,
+        total_exp=0, total_income=0 ;
+
+        for(let i=1;i<table.rows.length;i++){
+            //getting value from table
+            net_prices=table.rows[i].cells[1].innerText;
+            net_rent=table.rows[i].cells[2].innerText;
+            net_tax=table.rows[i].cells[3].innerText;
+            net_emi=table.rows[i].cells[4].innerText; 
+            net_montlyexp=table.rows[i].cells[5].innerText;  
+            net_totalexp=table.rows[i].cells[6].innerText;
+            net_totalincome=table.rows[i].cells[7].innerText;
+
+            //convert string into int
+            net_prices=parseInt(net_prices)
+            net_rent=parseInt(net_rent)
+            net_emi=parseInt(net_emi)
+            net_tax=parseInt(net_tax)
+            net_montlyexp=parseInt(net_montlyexp)
+            net_totalexp=parseInt(net_totalexp)
+            net_totalincome=parseInt(net_totalincome)
+            
+
+            //geting totals
+            total_prices+=net_prices
+            total_rent+=net_rent
+            total_emi+=net_emi
+            total_tax+=net_tax
+            total_montlyexp+=net_montlyexp
+            total_exp+=net_totalexp
+            total_income+=net_totalincome
+        
+        }
+            document.getElementById('totalprices').innerHTML= total_prices
+            document.getElementById('totalrent').innerHTML=total_rent
+            document.getElementById('totalemi').innerHTML=total_emi
+            document.getElementById('totaltax').innerHTML=total_tax
+            document.getElementById('total_montlyexp').innerHTML=total_montlyexp
+            document.getElementById('totalexp').innerHTML=total_exp
+            document.getElementById('totalincome').innerHTML=total_income
+    </script>
 </body>
 </html>
