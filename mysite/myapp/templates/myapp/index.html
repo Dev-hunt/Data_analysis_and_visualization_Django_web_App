@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <title>Homepage</title>
     <link rel="stylesheet" href="{% static 'myapp/styles.css'%}">
 </head>
@@ -96,7 +97,42 @@
     </div>
     
     </br>
+    
 
+    <div class="flex gap-8 m-10">
+        <div class="w-1/2">
+            <!-- <div class="text-indigo-600 font-bold, -10">Income Chart</div> -->
+            <div class=" font-bold text-indigo-600">Income Statics</div>
+                <div class="bg-gray-200 border-b border-gray-400 shadow ">
+                    <canvas id="IncomeChart" ></canvas>
+                </div>    
+        </div>   
+        <div class="w-1/2">
+            <!-- <div class="text-indigo-600 font-bold, -10">Income Chart</div> -->
+            <div class=" font-bold text-indigo-600">Expense Statics</div>
+                <div class="bg-gray-200 border-b border-gray-400 shadow ">
+                    <canvas id="expenseChart" ></canvas>
+                </div>    
+        </div>  
+    </div>
+
+
+    <div class="flex gap-8 m-10">
+      <div class="w-1/2">
+          <!-- <div class="text-indigo-600 font-bold, -10">Income Chart</div> -->
+          <div class=" font-bold text-indigo-600">Expense Spread Chart</div>
+              <div class="bg-gray-200 border-b border-gray-400 shadow ">
+                  <canvas id="ExpenseSpreadChart" width="600" height="600"></canvas>
+              </div>    
+      </div>   
+      <div class="w-1/2">
+          <!-- <div class="text-indigo-600 font-bold, -10">Income Chart</div> -->
+          <div class=" font-bold text-indigo-600">Income Spread Chart</div>
+              <div class="bg-gray-200 border-b border-gray-400 shadow ">
+                  <canvas id="IncomeSpreadChart" ></canvas>
+              </div>    
+      </div>  
+  </div>
 
     <!-- script for calculate bottom total -->
     <script>
@@ -106,12 +142,25 @@
         let net_prices=0, net_rent=0, net_emi=0,
         net_tax=0,net_montlyexp=0, net_totalexp=0, net_totalincome=0;
 
+        let property=""
         //declare variable to hold totals
         let total_prices=0, total_rent=0, 
         total_emi=0, total_tax=0,total_montlyexp=0,
         total_exp=0, total_income=0 ;
 
-        for(let i=1;i<table.rows.length;i++){
+
+        //declare array for storre
+        let net_totalincomes=[]
+        let Properties=[]
+        let montlyexpenses=[]
+        let net_exps=[]
+        let net_taxes=[]
+        let net_emis=[]
+
+
+
+
+        for(let i=1;i<table.rows.length-1;i++){
             //getting value from table
             net_prices=table.rows[i].cells[1].innerText;
             net_rent=table.rows[i].cells[2].innerText;
@@ -120,6 +169,7 @@
             net_montlyexp=table.rows[i].cells[5].innerText;  
             net_totalexp=table.rows[i].cells[6].innerText;
             net_totalincome=table.rows[i].cells[7].innerText;
+            property=table.rows[i].cells[0].innerText;
 
             //convert string into int
             net_prices=parseInt(net_prices)
@@ -129,7 +179,14 @@
             net_montlyexp=parseInt(net_montlyexp)
             net_totalexp=parseInt(net_totalexp)
             net_totalincome=parseInt(net_totalincome)
-            
+
+            //push values to array
+            net_totalincomes.push(net_totalincome)
+            Properties.push(property)
+            montlyexpenses.push(net_montlyexp)
+            net_emis.push(net_emi)
+            net_exps.push(net_totalexp)
+            net_taxes.push(net_tax)
 
             //geting totals
             total_prices+=net_prices
@@ -148,6 +205,106 @@
             document.getElementById('total_montlyexp').innerHTML=total_montlyexp
             document.getElementById('totalexp').innerHTML=total_exp
             document.getElementById('totalincome').innerHTML=total_income
-    </script>
+    
+
+
+        const ctx1 = document.getElementById('IncomeChart');
+      
+        new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: Properties,
+            datasets: [{
+              label: '# Income in Dollars',
+              data: net_totalincomes,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+
+
+
+        const ctx2 = document.getElementById('expenseChart');
+      
+        new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: Properties,
+            datasets: [{
+              label: '# Expense in Dollars',
+              data: montlyexpenses,
+              borderWidth: 1
+              
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+
+
+        const ctx3 = document.getElementById('ExpenseSpreadChart');
+      
+        new Chart(ctx3, {
+          type: 'bar',
+          data: {
+            labels: Properties,
+            datasets: [{
+              label: '# Expense in Dollars',
+              data: net_exps,
+              borderWidth: 1
+            },{
+              label: '# Taxes in Dollars',
+              data: net_taxes,
+              borderWidth: 1
+            },{
+              label: '# EMIs in Dollars',
+              data: net_emis,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        const ctx4 = document.getElementById('IncomeSpreadChart');
+      
+        new Chart(ctx4, {
+          type: 'doughnut',
+          data: {
+            labels: Properties,
+            datasets: [{
+              label: '# Income in Dollars',
+              data: net_totalincomes,
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      </script>
 </body>
 </html>
